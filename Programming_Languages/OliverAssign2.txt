@@ -1,0 +1,61 @@
+Homework #2
+Eric Oliver
+
+1. 
+	A) S ::= letter letdig
+		letter ::= "A"
+		letdig ::= letdig | "b" | 0 | ε
+	B) S ::= letter letdig letdig1
+		letter ::= "A"
+		letdig ::= "B" | 0
+		letdig1 ::= letdig1 | "b" | 0 | ε
+	C) S ::=  A count B
+		count ::= a b | count
+		A ::= "a" | ε
+		B ::= "b" | ε
+
+2. sxpr ::= atom | ( sxpr* )
+
+3.
+	A) expr ::= term addop <u>term</u>
+		expr ::= term addop <u>factor</u>
+		expr ::= term <u>addop</u> id
+		expr ::= term multop <u>term</u> + id
+		expr ::= term multop <u>factor</u> + id
+		expr ::= term <u>multop</u> id + id
+		expr ::= <u>term</u> * id + id
+		expr ::= <u>factor</u> * id + id
+		expr ::= id * id + id
+
+                   expr
+           /              |   \
+         term           addop term
+   /      |      \        |     \
+ factor multop factor     +   factor
+ /        |       \              \
+id        *       id             id
+
+	B) expr ::= term multop <u>term</u>
+		expr ::= term multop <u>factor</u>
+		expr ::= term <u>multop</u> id
+		expr ::= term addop <u>term</u> * id
+		expr ::= term addop <u>factor</u> * id
+		expr ::= term <u>addop</u> id * id
+		expr ::= <u>term</u> + id * id
+		expr ::= <u>factor</u> + id * id
+		expr ::= id + id * id
+
+             expr
+      /     |          \
+    term multop       term
+     /      |     /     |    \
+  factor    *  factor addop factor
+  /              /      |      \
+id              id      +      id
+
+	C) they are different because there is an extra "expr" nonterminal on B) because there are parentheses on the "id + id) portion"
+
+4.
+	A)				S
+
+	B)

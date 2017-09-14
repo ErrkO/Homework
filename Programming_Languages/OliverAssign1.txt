@@ -1,0 +1,15 @@
+OliverAssign1
+Eric Oliver
+
+1.
+	A) a b*
+	B) a b* c*
+	C) a b+
+	D) ((a|b|c)(a|b|c))+
+	E) (a|b|c)((a|b|c)(a|b|c))*
+
+2. "(normal_char|\n|\"|\\)*"
+
+3. ([a-zA-Z]|_)([a-zA-Z]|[0-9]|_)*
+
+4. (ε|0|([1-9][0-9]*)*).([0-9])+

@@ -1,0 +1,48 @@
+             expr
+      /     |          \
+    term multop       term
+     /      |     /     |    \
+  factor    *  factor addop factor
+  /              /      |      \
+id              id      +      id
+
+
+        S
+   /    |     \
+ expr  expr  expr
+ /\    /|\    /\
+S  S  ( S )  (  )
+
+
+expr ::= S S | ( S ) | ( )
+expr ::= s | expr | paren expr paren | paren paren
+s ::= S
+paren ::= lparen | rparen
+
+expr ::= SS)S)
+	::= s S ) S )
+	::= expr S ) S )
+	::= expr s ) S )
+	::= expr expr ) S )
+	::= expr expr lparen S )
+	::= expr expr paren S )
+	::= expr paren S )
+	::= expr paren s )
+	::= expr paren expr )
+	::= expr paren expr rparen
+	::= expr paren expr paren
+	::= expr expr
+
+expr ::= SS)S)
+	::= S S ) S )
+	::= S S ) S rparen
+	::= S S ) S paren
+	::= S S ) s paren
+	::= S S ) expr paren
+	::= S S rparen expr paren
+	::= S S paren expr paren
+	::= S S expr
+	::= S s expr
+	::= S expr expr
+	::= s expr expr
+	::= expr expr expr
