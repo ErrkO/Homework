@@ -56,6 +56,56 @@ id              id      +      id
 	C) they are different because there is an extra "expr" nonterminal on B) because there are parentheses on the "id + id) portion"
 
 4.
-	A)				S
+	A)
+	(1)
+expr ::= (S))S
+	 ::= lparen S ) ) S
+	 ::= paren S ) ) S
+	 ::= paren s ) ) S
+	 ::= paren expr ) ) S
+	 ::= paren expr rparen ) S
+	 ::= paren expr paren ) S 
+	 ::= expr ) S 
+	 ::= expr rparen S 
+	 ::= expr paren S
+	 ::= expr paren s
+	 ::= expr paren expr
+	 ::= expr
+	 
+                  expr
+            /             |   \
+          expr          paren expr
+     /     |    \         |     \
+  paren   expr paren    rparen   s
+    /      |     |	      |       \
+ lparen    s   rparen	  )        S
+ /         |      \
+(          S       )
+
+(2)	 
+expr ::= (S))S
+	 ::= ( S ) ) s
+	 ::= ( S ) ) expr
+	 ::= ( S ) rparen expr
+	 ::= ( S ) paren expr
+	 ::= ( S rparen paren expr
+	 ::= ( S paren paren expr
+	 ::= ( S expr expr
+	 ::= ( s expr expr
+	 ::= ( expr expr expr
+	 ::= (  expr expr
+	 ::= lparen expr expr
+	 ::= paren expr expr
+	 ::= expr
+	 
+              expr
+         /           |  \
+       paren       expr expr
+    /     |   \     |    \
+ lparen expr paren paren expr
+ /       |     |     |     \
+(        s  rparen rparen   s
+        /      |     |       \
+       S       )     )        S  	
 
 	B)

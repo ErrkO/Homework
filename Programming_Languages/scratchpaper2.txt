@@ -46,3 +46,52 @@ expr ::= SS)S)
 	::= S expr expr
 	::= s expr expr
 	::= expr expr expr
+	
+expr ::= (S))S
+	 ::= lparen S ) ) S
+	 ::= paren S ) ) S
+	 ::= paren s ) ) S
+	 ::= paren expr ) ) S
+	 ::= paren expr rparen ) S
+	 ::= paren expr paren ) S 
+	 ::= expr ) S 
+	 ::= expr rparen S 
+	 ::= expr paren S
+	 ::= expr paren s
+	 ::= expr paren expr
+	 ::= expr
+	 
+                  expr
+            /             |   \
+          expr          paren expr
+     /     |    \         |     \
+  paren   expr paren    rparen   s
+    /      |     |	      |       \
+ lparen    s   rparen	  )        S
+ /         |      \
+(          S       )
+	 
+expr ::= (S))S
+	 ::= ( S ) ) s
+	 ::= ( S ) ) expr
+	 ::= ( S ) rparen expr
+	 ::= ( S ) paren expr
+	 ::= ( S rparen paren expr
+	 ::= ( S paren paren expr
+	 ::= ( S expr expr
+	 ::= ( s expr expr
+	 ::= ( expr expr expr
+	 ::= (  expr expr
+	 ::= lparen expr expr
+	 ::= paren expr expr
+	 ::= expr
+	 
+              expr
+         /           |  \
+       paren       expr expr
+    /     |   \     |    \
+ lparen expr paren paren expr
+ /       |     |     |     \
+(        s  rparen rparen   s
+        /      |     |       \
+       S       )     )        S  
