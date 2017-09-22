@@ -108,4 +108,4 @@ expr ::= (S))S
         /      |     |       \
        S       )     )        S  	
 
-	B)
+	B) expr ::= S expr | ( S ) | ( )
