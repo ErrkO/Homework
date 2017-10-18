@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 // Eric Oliver
 // CSCI 4100
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
 
 			int cread = read(file,buffer,4095);
 
-			int cwrite = write(filecp,buffer,4095);
+			int cwrite = write(filecp,buffer,cread);
 
 			int result = close(file);
 

@@ -1,0 +1,17 @@
+#lang racket
+
+(define lettergrade
+  (lambda (num)
+    (if (< num 0)
+      (display "number out of range")
+      (if (< num 60)
+        (display "Grade: F")
+        (if (< num 70)
+          (display "Grade: D")
+          (if (< num 80)
+            (display "Grade: C")
+            (if (< num 90)
+              (display "Grade: B")
+              (if (< num 100)
+                (display "Grade: A")
+                (display "Number out of range")))))))))
