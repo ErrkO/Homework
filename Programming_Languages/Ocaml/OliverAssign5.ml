@@ -85,5 +85,5 @@ let quicksort lst =
 	match lst with
     | [] -> lst
     | f::b -> let tup = partition f b in
-    	quicksort (fst tup) @ [f] @ quicksort (snd tup)
+    	quick_help (fst tup) @ [f] @ quick_help (snd tup)
     in quick_help lst;;

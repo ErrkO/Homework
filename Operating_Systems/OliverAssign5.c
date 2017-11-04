@@ -13,46 +13,18 @@
 
 // This program is a basic shell that executes linux commands
 
-#define MAX_LINE = 256;
-#define MAX_ARGS = 64;
+#define MAX_LINE 256
+#define MAX_ARGS 64
+
+int is_blank(const char *line);
+void parse_args(const char *command, char *argv[]);
+void read_line(char *line);
+void Loop();
 
 int main( int argc, char *argv[])
 {
 
-	int xtf = 0;
-
-	char prompt[] = "";
-	char xt[] = "exit";
-	char space[] = " ";
-
-	char cmdln[] = "";
-
-	while (xtf == 0)
-	{
-
-		printf("> ");
-
-		scanf("%s",prompt);
-
-		if (strcmp(prompt,xt) == 0)
-		{
-
-			printf("[exiting turtle shell]");
-
-			xtf = 1;
-
-		}
-
-		else
-		{
-
-			printf("%s",prompt);
-
-			printf("\n");
-
-		}
-
-	}
+	Loop();
 
 }
 
@@ -131,5 +103,88 @@ void Parse_Args(char *command, char *argv[])
     	argv[MAX_ARGS - 1] = NULL;
 
     }
+
+}
+
+void Loop()
+{
+
+	int xtf = 0;
+
+	char prompt[MAX_LINE];
+	char xt[] = "exit";
+	char space[] = " ";
+	char redirects[] = {'|','>','<'};
+
+	char *argv[MAX_ARGS];
+
+	pid_t pid;
+
+	printf("[Entering turtle shell]\n");;
+
+	while (xtf == 0)
+	{
+
+		printf("> ");
+
+		Read_Line(prompt);
+
+		if (strcmp(prompt,xt) == 0)
+		{
+
+			printf("[exiting turtle shell]\n");
+
+			xtf = 1;
+
+		}
+
+		char *c = prompt;
+
+		while(*c)
+		{
+
+			if (strchr(redirects, *c))
+       		{
+
+          		printf("cannot use |, >, >>, <, <<, characters\n");
+
+       		}
+
+       		c++;
+
+		}
+
+		if (Is_Blank(prompt) == 0)
+		{
+
+			Parse_Args(prompt,argv);
+
+			pid = fork();
+
+			if (pid == 0)
+			{
+
+				execvp(argv[0],argv);
+
+				fprintf( stderr, "Something went wrong with %s .\n " , argv[0] );
+
+				exit(1);
+
+			}
+
+			wait(NULL);
+
+		}
+
+		else
+		{
+
+			printf("Please enter a command!\n");;
+
+		}
+
+		
+
+	}
 
 }
