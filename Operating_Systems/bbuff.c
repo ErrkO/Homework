@@ -12,7 +12,9 @@
 void bb_init_msg(struct bb_msg *msg, int t_id, int m_id) 
 {
 
-  /* YOUR CODE HERE */
+  msg.t_id = t_id;
+  
+  msg.m_id = m_id;
 
 }
 
@@ -20,7 +22,7 @@ void bb_init_msg(struct bb_msg *msg, int t_id, int m_id)
 void bb_copy_msg(struct bb_msg * source, struct bb_msg * destination) 
 {
 
-  /* YOUR CODE HERE */
+  stpcpy(destination.m_id,source.m_id);
 
 }
 
@@ -28,7 +30,7 @@ void bb_copy_msg(struct bb_msg * source, struct bb_msg * destination)
 void bb_display_msg(struct bb_msg *msg, int receiver) 
 {
 
-  /* YOUR CODE HERE */
+  printf("[sending thread: %d, message %d, receiving thread: %d]",
 
 }
 
@@ -36,7 +38,7 @@ void bb_display_msg(struct bb_msg *msg, int receiver)
 void bb_init(struct bbuff * buffer) 
 {
 
-  /* YOUR CODE HERE */
+  /* initizilize bounded buffer, in and out varaibles are set to zero */
 
 }
 
@@ -44,7 +46,13 @@ void bb_init(struct bbuff * buffer)
 void bb_send(struct bbuff * buffer, struct bb_msg * message) 
 {
 
-  /* YOUR CODE HERE */
+  /* Acquire buffer lock */
+  
+  
+  /* While buffer is full, release the lock, then acquere it again so the receiving thread can access buffer*/
+  
+  
+  /* 
 
 }
 
@@ -54,4 +62,12 @@ void bb_receive(struct bbuff *buffer, struct bb_msg * message)
 
   /* YOUR CODE HERE */
 
+}
+
+
+void * pthread_fun(void * fun)
+{
+	
+	
+	
 }
