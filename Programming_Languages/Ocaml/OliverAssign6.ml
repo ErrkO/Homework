@@ -2,6 +2,8 @@
 (*CSCI 4230*)
 (*Assignment 6*)
 
+(*#use "OliverAssign6.ml";;*)
+
 type ’a bst = Empty | Node of ’a * ’a bst * ’a bst ;;
 
 type ks_item = { name : string ; value : int ; weight : int }
@@ -19,11 +21,20 @@ type expression = Int_lit o f int | Float_lit o f float | Bool_lit o f bool | If
 
 let bst_insert tree item =
 	let rec insert_help tree item =
-	| [] -> tree
+	match item with
+	| [] -> Node([],item,[])
+	| Node(left,k,right) ->
+		if item < k then Node(insert_help item left,k,right)
+		else Node(left,k,insert_help item right);;
+
 
 let bst_contains tree item = 
 	let rec contains_help tree item =
-
+	| []-> false
+	| Node(left,k,right) ->
+		if item < k then contains_help item left
+		else if item = k then true
+		else contains_help item right;;
 
 let bubble_sort arr = 
 	let rec bubble_help arr =
