@@ -38,16 +38,40 @@ let bst_contains tree item =
 
 let bubble_sort arr = 
 	let rec bubble_help arr =
+  	let sorted = function
+  	| h1 :: h2 :: tl when h1 > h2 ->
+        h2 :: bubble_help (h1 :: tl)
+  	| h1 :: tl ->
+        h1 :: bubble_help tl
+  	| tl -> tl
+	in
+		if lst = sorted then
+    		lst
+		else
+    		bubble_help sorted;;
 
 let knapsack_add ks item = 
-	let rec add_help ks item = 
-
+	ks2 = {total_value = ks.total_value+item.value; total_weight = ks.total_weight+item.weight ; contents = ks.contents @ item};;
 
 let solve_knapsack items capacity = 
-	let rec solve_help items capacity =
+	let rec solve_help ks lst = 
+	match lst with
+	| [] = ks
+	| f::b -> if f == [] then
+		ks
+	else
+		if f.weight + ks.total_weight < capacity then
+			knapsack_add ks f
+			solve_help ks b
+		else
+			ks
+	in solve_help tks b;;
 
-
-let  process_if_expr cond_type then_expr_type else_expr_type = 
+let process_if_expr cond_type then_expr_type else_expr_type = 
+	if cond_type != Bool_type then
+		raise Expected_bool of type_error
+	else
+		
 
 
 let process_operation op expr1_type expr2_type = 
