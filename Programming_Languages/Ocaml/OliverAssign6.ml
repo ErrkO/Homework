@@ -68,16 +68,40 @@ let solve_knapsack items capacity =
 	in solve_help tks b;;
 
 let process_if_expr cond_type then_expr_type else_expr_type = 
-	if cond_type != Bool_type then
-		raise Expected_bool of type_error
+	if cond_type <> Bool_type then
+		raise (Type_error Expected_bool)
 	else
-		
-
+		match then_expr_type with
+		| Int_type when else_expr_type = Int_type -> Int_type
+		| Float_type when else_expr_type = Float_type -> Float_type
+		| _ -> raise (Type_error Expected_same);;
 
 let process_operation op expr1_type expr2_type = 
+	if expr1_type <> expr2_type then
+		raise (Type_error Expected_same)
+	else
+		match op with
+		| Add_op when expr1_type = Int_type -> Int_type
+		| Add_op when expr1_type = Float_type -> Float_type
+		| Add_op when expr1_type = Bool_type -> raise (Type_error Expected_num)
+		| Sub_op when expr1_type = Int_type -> Int_type
+		| Sub_op when expr1_type = Float_type -> Float_type
+		| Sub_op when expr1_type = Bool_type -> raise (Type_error Expected_num)
+		| Mult_op when expr1_type = Int_type -> Int_type
+		| Mult_op when expr1_type = Float_type -> FLoat_type
+		| Mult_op when expr1_type = Bool_type -> raise (Type_error Expected_num)
+		| Div_op when expr1_type = Int_type -> Int_type
+		| Div_op when expr1_type = Float_type -> Float_type
+		| Div_op when expr1_type = Bool_type -> raise (Type_error Expected_num)
+		| Less_op -> Bool_type
+		| Greater_op -> Bool_type
+		| Less_eq_op -> Bool_type
+		| Greater_eq_op -> Bool_type
+		| Eq_op -> Bool_type
+		| Not_eq_op -> Bool_type;;
 
 
 let infer_type expr = 
+	let rec infer_help expr =
+	
 
-
-let 
