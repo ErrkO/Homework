@@ -7,9 +7,12 @@
 #include "va_space.h"
 #include <stdio.h>
 
+ void InttoBool(int num);
+
 int main(int argc, char *argv[])
 {
 
+	/* Variable delcarations */
 	pt_bits c0,c1,c2,c4,c8,c16,c32,c64,c128,c256;
 
 	pt_index page_num, frame_num;
@@ -17,6 +20,10 @@ int main(int argc, char *argv[])
 	pt_entry virtual_address,physical_address;
 
 	int address[PT_SIZE];
+
+	int flag, permneeded;
+
+	permneeded = PT_READ | PT_WRITE;
 
 	c0 = 0b000000000;
 	c1 = 0b000000001;
@@ -31,105 +38,177 @@ int main(int argc, char *argv[])
 
 	page_table table;
 
+	/* setting up the table */
 	pt_init(table);
 
 	pt_display(table);
 
-	for (int i = 0; i < PT_SIZE; i++)
+	/* Mapping our test entries */
+	pt_map(table,0,20,permneeded);
+
+	pt_map(table,1,12,permneeded);
+
+	pt_map(table,2,30,permneeded);
+
+	pt_display_entry(table,0);
+
+	pt_display_entry(table,1);
+
+	pt_display_entry(table,2);
+
+	puts("");
+
+
+
+	puts("Testing for dirty bit");
+
+	InttoBool(pt_dirty(table,0));
+
+	flag = pt_dirty(table,0);
+
+	printf("flag = %01x \n", flag);
+
+	puts("Setting the dirty bit");
+
+	pt_set_dirty(table,0);
+
+	pt_display_entry(table,0);
+
+	puts("Testing for dirty bit");
+
+	flag = pt_dirty(table,0);
+
+	printf("flag = %01x \n", flag);
+
+	InttoBool(pt_dirty(table,0));
+
+	puts("Clearing the dirty bit");
+
+	pt_clear_dirty(table,0);
+
+	pt_display_entry(table,0);
+
+	puts("");
+
+
+
+	puts("Testing for accessed bit");
+
+	InttoBool(pt_accessed(table,1));
+
+	puts("Setting the accessed bit");
+
+	pt_set_accessed(table,1);
+
+	pt_display_entry(table,1);
+
+	puts("Testing for accessed bit");
+
+	InttoBool(pt_accessed(table,1));
+
+	puts("Clearing the accessed bit");
+
+	pt_clear_accessed(table,1);
+
+	pt_display_entry(table,1);
+
+	puts("");
+
+
+
+	puts("Testing for present bit");
+
+	InttoBool(pt_present(table,2));
+
+	puts("Setting present bit");
+
+	pt_set_present(table,2);
+
+	pt_display_entry(table,2);
+
+	puts("Testing for present bit");
+
+	InttoBool(pt_present(table,2));
+
+	puts("Clearing the present bit");
+
+	pt_clear_present(table,2);
+
+	pt_display_entry(table,2);
+
+	puts("");
+
+
+
+	puts("Testing for allocated bit");
+
+	InttoBool(pt_allocated(table,0));
+
+	puts("");
+
+
+	puts("Testing the translate function");
+
+	virtual_address = 0x0021;
+
+	pt_display_address("virtual address",virtual_address);
+
+	physical_address = pt_translate(table,virtual_address,permneeded);
+
+	pt_display_address("Physical Address",physical_address);
+
+	puts("");
+
+
+
+	puts("Testing the unmap function");
+
+	pt_display_entry(table,1);
+
+	pt_unmap(table,1);
+
+	pt_display_entry(table,1);
+
+	return 0;
+
+}
+
+void InttoBool(int num)
+{
+
+	if (num > 0)
 	{
 
-		if (i < 20)
-		{
-
-			pt_map(table,i,i,c0);
-
-		}
-
-		else if (i < 40)
-		{
-
-			pt_map(table,i,i,c1);
-
-		}
-
-		else if (i < 60)
-		{
-
-			pt_map(table,i,i,c2);
-
-		}
-
-		else if (i < 80)
-		{
-
-			pt_map(table,i,i,c4);
-
-		}
-
-		else if (i < 100)
-		{
-
-			pt_map(table,i,i,c8);
-
-		}
-
-		else if (i < 120)
-		{
-
-			pt_map(table,i,i,c16);
-
-		}
-
-		else if (i < 140)
-		{
-
-			pt_map(table,i,i,c32);
-
-		}
-
-		else if (i < 160)
-		{
-
-			pt_map(table,i,i,c64);
-
-		}
-
-		else if (i < 180)
-		{
-
-			pt_map(table,i,i,c128);
-
-		}
-
-		else
-		{
-
-			pt_map(table,i,i,c256);
-
-		}
-
-		
+		puts("True");
 
 	}
 
-	int row, col;
-    const int ROWS = 16, COLS = 16;
-    printf("   ");
-    for(col = 0; col < COLS; col++)
-        printf(" %x    ", col);
-    puts("");
-    for(row = 0; row < ROWS; row++) 
-    {
+	else if (num == -1)
+	{
 
+		puts("Error");
 
+	}
 
-        printf("%x  ", row);
-        for(col = 0; col < COLS; col++)
-        printf("%16x  ", pt_display_address(table[row * 16 + col]);
-        puts("");
-    
-    }
+	else if (num == -1)
+	{
 
-	pt_display(table);
+		puts("Error");
+
+	}
+
+	else if (num == -1)
+	{
+
+		puts("Error");
+
+	}
+
+	else
+	{
+
+		puts("False");
+
+	}
 
 }
