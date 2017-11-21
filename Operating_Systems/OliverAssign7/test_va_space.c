@@ -11,6 +11,10 @@
 
 int main(int argc, char *argv[])
 {
+	
+	printf(PT_ALLOC);
+	
+	printf(table[page_num] & (0x0000 | PT_ALLOC));
 
 	/* Variable delcarations */
 	pt_bits c0,c1,c2,c4,c8,c16,c32,c64,c128,c256;
