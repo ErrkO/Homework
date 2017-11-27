@@ -8,13 +8,10 @@
 #include <stdio.h>
 
  void InttoBool(int num);
+ int pt_trans(page_table table, pt_address virtual_address, pt_bits perm_needed);
 
 int main(int argc, char *argv[])
 {
-	
-	printf(PT_ALLOC);
-	
-	printf(table[page_num] & (0x0000 | PT_ALLOC));
 
 	/* Variable delcarations */
 	pt_bits c0,c1,c2,c4,c8,c16,c32,c64,c128,c256;
@@ -48,17 +45,19 @@ int main(int argc, char *argv[])
 	pt_display(table);
 
 	/* Mapping our test entries */
-	pt_map(table,0,20,permneeded);
+	pt_map(table,0,0x20,permneeded);
 
-	pt_map(table,1,12,permneeded);
+	pt_map(table,1,0x12,permneeded);
 
-	pt_map(table,2,30,permneeded);
+	pt_map(table,2,0x30,permneeded);
 
 	pt_display_entry(table,0);
 
 	pt_display_entry(table,1);
 
 	pt_display_entry(table,2);
+
+	pt_display(table);
 
 	puts("");
 
@@ -70,7 +69,7 @@ int main(int argc, char *argv[])
 
 	flag = pt_dirty(table,0);
 
-	printf("flag = %01x \n", flag);
+	//printf("flag = %01x \n", flag);
 
 	puts("Setting the dirty bit");
 
@@ -82,7 +81,7 @@ int main(int argc, char *argv[])
 
 	flag = pt_dirty(table,0);
 
-	printf("flag = %01x \n", flag);
+	//printf("flag = %01x \n", flag);
 
 	InttoBool(pt_dirty(table,0));
 
@@ -157,9 +156,14 @@ int main(int argc, char *argv[])
 
 	pt_display_address("virtual address",virtual_address);
 
-	physical_address = pt_translate(table,virtual_address,permneeded);
+	physical_address = pt_trans(table,virtual_address,permneeded);
 
-	pt_display_address("Physical Address",physical_address);
+	if (physical_address != 0)
+	{
+
+		pt_display_address("Physical Address",physical_address);
+
+	}
 
 	puts("");
 
@@ -172,6 +176,76 @@ int main(int argc, char *argv[])
 	pt_unmap(table,1);
 
 	pt_display_entry(table,1);
+
+
+	puts("Testing for allocated bit");
+
+	InttoBool(pt_allocated(table,1));
+
+	puts("");
+
+
+
+	puts("Testing for error codes");
+
+	puts("");
+
+	puts("Testing for Not Permited");
+
+	pt_map(table,3,0x02,0x00);
+
+	pt_display_entry(table,3);
+
+	physical_address = pt_trans(table,0x0300,permneeded);
+
+	if (physical_address != 0)
+	{
+
+		printf("Address: %04x\n", physical_address);
+
+	}
+
+	puts("");
+
+	puts("Testing for Not allocated");
+
+	pt_display_entry(table,4);
+
+	physical_address = pt_trans(table,0x0400,permneeded);
+
+	if (physical_address != 0)
+	{
+
+		printf("Address: %04x\n", physical_address);
+
+	}
+
+	puts("");
+
+	puts("Testing for Not present");
+
+	pt_map(table,5,0x02,0x00);
+
+	pt_display_entry(table,5);
+
+	pt_clear_present(table,5);
+
+	pt_display_entry(table,5);
+
+	physical_address = pt_trans(table,0x0500,permneeded);
+
+	if (physical_address != 0)
+	{
+
+		printf("Address: %04x\n", physical_address);
+
+	}
+
+
+
+	puts("");
+
+	pt_display(table);
 
 	return 0;
 
@@ -190,21 +264,21 @@ void InttoBool(int num)
 	else if (num == -1)
 	{
 
-		puts("Error");
+		puts("Error: Not Allocated");
 
 	}
 
-	else if (num == -1)
+	else if (num == -2)
 	{
 
-		puts("Error");
+		puts("Error: Not Present");
 
 	}
 
-	else if (num == -1)
+	else if (num == -3)
 	{
 
-		puts("Error");
+		puts("Error: Permissions Denied");
 
 	}
 
@@ -212,6 +286,47 @@ void InttoBool(int num)
 	{
 
 		puts("False");
+
+	}
+
+}
+
+int pt_trans(page_table table, pt_address virtual_address, pt_bits perm_needed)
+{
+
+	int num = pt_translate(table,virtual_address,perm_needed);
+
+	if (num == -1)
+	{
+
+		puts("Error: Not Allocated");
+
+		return 0;
+
+	}
+
+	else if (num == -2)
+	{
+
+		puts("Error: Not Present");
+
+		return 0;
+
+	}
+
+	else if (num == -3)
+	{
+
+		puts("Error: Permissions Denied");
+
+		return 0;
+
+	}
+
+	else
+	{
+
+		return num;
 
 	}
 

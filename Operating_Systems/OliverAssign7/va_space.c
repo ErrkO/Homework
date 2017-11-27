@@ -96,7 +96,9 @@ void pt_clear_present(page_table table, pt_index page_num)
 int pt_allocated(page_table table, pt_index page_num) 
 {
 
-    if (table[page_num] & (0x0000 | PT_ALLOC) == PT_ALLOC)
+    int mask = table[page_num] & (0x0000 | PT_ALLOC);    
+
+    if ( mask == PT_ALLOC)
     {
 
         return 1;
@@ -110,7 +112,9 @@ int pt_allocated(page_table table, pt_index page_num)
 int pt_dirty(page_table table, pt_index page_num) 
 {
 
-    if (table[page_num] & (0x0000 | PT_DIRTY) == PT_DIRTY)
+    int mask = table[page_num] & (0x0000 | PT_DIRTY);
+
+    if ( mask == PT_DIRTY)
     {
 
         return 1;
@@ -124,7 +128,9 @@ int pt_dirty(page_table table, pt_index page_num)
 int pt_accessed(page_table table, pt_index page_num) 
 {
 
-    if (table[page_num] & (0x0000 | PT_ACCESSED) == PT_ACCESSED)
+    int mask = table[page_num] & (0x0000 | PT_ACCESSED);
+
+    if ( mask == PT_ACCESSED)
     {
 
         return 1;
@@ -138,7 +144,9 @@ int pt_accessed(page_table table, pt_index page_num)
 int pt_present(page_table table, pt_index page_num) 
 {
 
-    if (table[page_num] & (0x0000 | PT_PRESENT) == PT_PRESENT)
+    int mask = table[page_num] & (0x0000 | PT_PRESENT);
+
+    if ( mask == PT_PRESENT)
     {
 
         return 1;
@@ -153,7 +161,9 @@ int pt_present(page_table table, pt_index page_num)
 int pt_not_permitted(page_table table, pt_index page_num, pt_bits perm_needed) 
 {
 
-    if (table[page_num] & (0x0000 | perm_needed) == perm_needed)
+    int mask = table[page_num] & (0x0000 | perm_needed);
+
+    if ( mask == perm_needed)
     {
 
         return 0;
@@ -170,16 +180,16 @@ int pt_translate(page_table table, pt_address virtual_address, pt_bits perm_need
 
     int page_num, offset;
 
-    pt_entry physcal_address;
+    pt_entry physical_address;
 
     page_num = virtual_address >> 8;
 
     offset = virtual_address & 0x00ff;
 
-    if (pt_not_permitted(table,page_num,perm_needed) == 1)
+    if (pt_allocated(table,page_num) == 0)
     {
 
-        return ERR_PERMISSION_DENIED;
+        return ERR_PAGE_NOT_ALLOCATED;
 
     }
 
@@ -190,21 +200,23 @@ int pt_translate(page_table table, pt_address virtual_address, pt_bits perm_need
     
     }
 
-    else if (pt_allocated(table,page_num) == 0)
+    else if (pt_not_permitted(table,page_num,perm_needed) == 1)
     {
 
-        return ERR_PAGE_NOT_ALLOCATED;
+        return ERR_PERMISSION_DENIED;
 
     }
 
     else
     {
 
-        physcal_address = table[page_num] & 0xff00;
+        physical_address = table[page_num];
 
-        physcal_address = physcal_address & offset;
+        physical_address = physical_address & 0xff00;
 
-        return physcal_address;
+        physical_address = physical_address | offset;
+
+        return physical_address;
 
     }
 
