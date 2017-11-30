@@ -1,0 +1,1 @@
+mother(Mother,child) :- female(Mother), parent(Mother,child).
