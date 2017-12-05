@@ -10,8 +10,32 @@
 // This function must only be called after table_lock has been acquired
 int test_phil(struct dining_room *room,  int phil)
 {
-  
 	
+	if (!&room->table_lock)
+	{
+		
+		return 0;
+		
+	}
+	
+	int r = right_neighbor(room,phil);
+	int l = left_neighbor(room,phil);
+  
+	if (room->phil_state[phil] == HUNGRY && room->phil_state[r] != EATING && room->phil_state[l] != EATING)
+	{
+		
+		room->phil_state[phil] = EATING;
+		
+		display_states(room);
+		
+	}
+	
+	else
+	{
+		
+		return 0;
+		
+	}
   
 }
 
@@ -19,12 +43,16 @@ int test_phil(struct dining_room *room,  int phil)
 void run_simulation(struct dining_room *room)
 {
 	
-	puts("	Phil	|	state	");
+	pthread_t threads[];
 	
-	for (int i=0; i < room->num_phils; i++)
+	display_headings(room);
+	
+	display_states(room);
+	
+	for (int i = 0; i < room->num_phils; i ++)
 	{
 		
-		
+		start_philosopher(room->phil_args[i]);
 		
 	}
 	
@@ -34,7 +62,17 @@ void run_simulation(struct dining_room *room)
 void grab_forks(struct dining_room *room, int phil)
 {
 	
+	pthread_mutex_lock(&room->table_lock);
 	
+	room->phil_state[phil] = HUNGRY;
+	
+	display_states(room);
+	
+	test_phil(room,phil;)
+	
+	//wait if it is not safe to eat
+	
+	pthread_mutex_unlock(&room->table_lock);
 	
 }
 
@@ -42,7 +80,17 @@ void grab_forks(struct dining_room *room, int phil)
 void release_forks(struct dining_room *room, int phil )
 {
 	
+	pthread_mutex_lock(&room->table_lock);
 	
+	room->phil_state[phil] = THINKING;
+	
+	display_states(room);
+	
+	//wait to see if it is safe to eat
+	
+	// if it is notify neighbors
+	
+	pthread_mutex_unlock(&room->table_lock);
 	
 }
 
