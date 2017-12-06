@@ -18,9 +18,6 @@ first_cousin(C1,C2) :- parent(P1,C1), sibling(P1,P2), parent(P2,C2).
 ancestor(A,D) :- parent(A,D).
 ancestor(A,D) :- parent(A,B), ancestor(B,D).
 
-%common_ancestor(A,P1,P2) :- first_cousin(P1,P2).
-%common_ancestor(A,P1,P2) :- first_cousin(B,C), parent(C,P2), parent(B,P1), common_ancestor(A,B,C).
-
 % returns true if P1 and P2 share A as an ancestor
 common_ancestor(A,P1,P2) :- not(P1 = P2), ancestor(A,P1), ancestor(A,P2).
 
@@ -30,17 +27,12 @@ do_reverse(L, R) :- do_reverse(L, R, []).
 do_reverse([], L, L).
 do_reverse([H|T], L, TR) :- do_reverse(T, L, [H|TR]).
 
-% insert
-%insert(I,[],[I]) :- [I].
-%insert(I, [H|T]) :- I > H, insert(I,T).
-%insert(I, [H|T], [I,H|T]) :- I < H.
-
+% returns true if the result is the list with I added to the front
 insert(X, [], [X]):- !.
 insert(X, [X1|L1], [X, X1|L1]):- X=<X1, !.
 insert(X, [X1|L1], [X1|L]):- insert(X, L1, L).
 
-% insertion sort
-
+% returns true if the result contains the original list sorted in order
 insertion_sort([], []):- !.
 insertion_sort([X|L], S):- insertion_sort(L, S1), insert(X, S1, S).
 
