@@ -16,7 +16,7 @@ first_cousin(C1,C2) :- parent(P1,C1), sibling(P1,P2), parent(P2,C2).
 
 % returns true if D descends from A
 ancestor(A,D) :- parent(A,D).
-ancestor(A,D) :- parent(A,B), ancestor(C,D).
+ancestor(A,D) :- parent(A,B), ancestor(B,D).
 
 %common_ancestor(A,P1,P2) :- first_cousin(P1,P2).
 %common_ancestor(A,P1,P2) :- first_cousin(B,C), parent(C,P2), parent(B,P1), common_ancestor(A,B,C).
@@ -31,12 +31,22 @@ do_reverse([], L, L).
 do_reverse([H|T], L, TR) :- do_reverse(T, L, [H|TR]).
 
 % insert
+%insert(I,[],[I]) :- [I].
+%insert(I, [H|T]) :- I > H, insert(I,T).
+%insert(I, [H|T], [I,H|T]) :- I < H.
+
+insert(X, [], [X]):- !.
+insert(X, [X1|L1], [X, X1|L1]):- X=<X1, !.
+insert(X, [X1|L1], [X1|L]):- insert(X, L1, L).
 
 % insertion sort
 
+insertion_sort([], []):- !.
+insertion_sort([X|L], S):- insertion_sort(L, S1), insert(X, S1, S).
+
 % returns true if L3 is a union of L1 and L2
 is_union([], L2, L3).
-is_union([H|L1t, L2, L3) :- memberchk(H, L2), !, is_union(L1t, L2, L3).
+is_union([H|L1t], L2, L3) :- memberchk(H, L2), !, is_union(L1t, L2, L3).
 is_union([H|L1t], L2, [H|L3t]) :- is_union(L1t, L2, L3t).
 
 % returns true if L3 is an intersection of L1 and L2
